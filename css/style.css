@@ -1,0 +1,22 @@
+.container{
+    display: flex;
+    flex-direction: column;
+}
+
+.information-container{
+    display: grid;
+    grid-template-columns: 0.7f 0.3f;
+    grid-template-rows: 1f 1f;
+}
+
+#trash-level{
+    background-color: darkgray;
+}
+
+#battery{
+    background-color: darkcyan;
+}
+
+#onoff-button{
+   background-color: cyan; 
+}
