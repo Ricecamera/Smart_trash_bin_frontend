@@ -3,12 +3,14 @@
     font-family: sans-serif;
 }
 
+/*container of the whole page*/
 .container{
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
 }
 
+/*container of the main part*/
 .information-container{
     display: flex;
     flex-flow: row wrap;
@@ -22,15 +24,16 @@
     border-radius: 15px;
     margin: 2rem;
     padding: 15px;
-    
 }
 
+/*text on top-left of the box*/
 .boxtag{
     color: #D0CFCE;
     font-size: 20px;
     margin: 0%;
 }
 
+/*-----toggle button styling----- from https://www.youtube.com/watch?v=uCjDIMADK0w&t=217s */
 .switch {
     position: relative;
     display: inline-block;
@@ -72,6 +75,7 @@ input:checked + .slider{
 input:checked + .slider:before{
     transform: translateY(-50px);
 }
+/*-----toggle button styling-----*/
 
 .warning-text {
     color: white;

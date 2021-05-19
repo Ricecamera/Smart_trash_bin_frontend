@@ -4,8 +4,8 @@
 <head>
     <title>NETPIE2020</title>
     <link rel="stylesheet" href="css/style.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
-    <script type="text/javascript" src="js/main.js"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js/main.js"></script>-->
 </head>
 
 <body>
@@ -17,17 +17,19 @@
             <div class="box" id="trash-level-box">
                 <h2 class="boxtag" id="trash-level-tag">trash level</h2>
                 <img id="trash-can-icon" src="imgs/trash icon.png">
+                <!--the text here will link to the actual filled volume of a can-->
                 <p id="trash-percent">50 %</p>
             </div>
             <div class="box">
                 <h2 class="boxtag">on / off</h2>
-
+                <!--- toggle slider use for open/close the can-->
                 <label class="switch">
                     <input type="checkbox">
                     <span class="slider"></span>
                 </label>
             </div>
         </div>
+        <!--this will show when the can fill is more than 50 percent-->
         <div class="warning-text">The can is almost full!</div>
         <footer>
         </footer>
