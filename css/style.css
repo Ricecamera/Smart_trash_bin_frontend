@@ -1,22 +1,114 @@
+:root {
+    background: #1C1D1E;
+    font-family: sans-serif;
+}
+
 .container{
     display: flex;
-    flex-direction: column;
+    flex-flow: column nowrap;
+    align-items: center;
 }
 
 .information-container{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+
+.box {
+    background-color: #7A7A76;
+    border-radius: 15px;
+    margin: 2rem;
+    padding: 15px;
+    
+}
+
+.boxtag{
+    color: #D0CFCE;
+    font-size: 20px;
+    margin: 0%;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 110px;
+    margin: 20px 40px;
+}
+
+.slider{
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.switch input { display:none }
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 50px;
+    width: 50px;
+    right: 5px;
+    bottom: 5px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50px;
+}
+
+input:checked + .slider{
+    background-color: rgb(57, 230, 66);
+}
+
+input:checked + .slider:before{
+    transform: translateY(-50px);
+}
+
+.warning-text {
+    color: white;
+    font-size: 30px;
+}
+
+#trash-level-box{
     display: grid;
-    grid-template-columns: 0.7f 0.3f;
-    grid-template-rows: 1f 1f;
+    grid-template-rows: 1fr 8fr;
+    grid-template-columns: 5fr 2fr;
+    grid-template-areas: 
+    "tag tag"
+    "trashcan percent";
 }
 
-#trash-level{
-    background-color: darkgray;
+#trash-level-tag{
+    grid-area: tag;
+}
+#trash-can-icon{
+    position: relative;
+    width: 300px;
+    height: 308px;
+    grid-area: trashcan;
 }
 
-#battery{
-    background-color: darkcyan;
+#trash-percent{
+    color: yellow;
+    font-size: 28px;
+    font-weight: bold;
+    grid-area: percent;
+    align-self: center;
+    transform: translateY(-50%);
 }
 
-#onoff-button{
-   background-color: cyan; 
+#title{
+    color: #F6A811;
+    font-size: 36px;
+    font-weight: bold;
 }
+

@@ -6,33 +6,32 @@
     <link rel="stylesheet" href="css/style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
     <script type="text/javascript" src="js/main.js"></script>
-</head <body>
-<div class="container">
-    <header>
-        <h1 id="title">Smart Trash Can</h1>
-    </header>
-    <main>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1 id="title">Smart Trash Can</h1>
+        </header>
         <div class="information-container">
-            <div id="trash-level">
-                <h1 class="boxtag">trash level</h1>
-                <img id="trash-can-icon">
+            <div class="box" id="trash-level-box">
+                <h2 class="boxtag" id="trash-level-tag">trash level</h2>
+                <img id="trash-can-icon" src="imgs/trash icon.png">
+                <p id="trash-percent">50 %</p>
             </div>
-            <div id="battery">
-                <h1 class="boxtag">battery level</h1>
-                <img id="battery-icon">
-            </div>
-            <div id="onoff-button">
-                <h1 class="boxtag">on / off</h1>
-                <div id="scroll-plain"></div>
+            <div class="box">
+                <h2 class="boxtag">on / off</h2>
+
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
             </div>
         </div>
-
-        <span id="warning-text">The can is almost full!</span>
-    </main>
-    <footer>
-</div>
-
-</footer>
+        <div class="warning-text">The can is almost full!</div>
+        <footer>
+        </footer>
+    </div>
 </body>
 
 </html>
