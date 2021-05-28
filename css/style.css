@@ -116,3 +116,26 @@ input:checked + .slider:before{
     font-weight: bold;
 }
 
+#status {
+        background: #333;
+        color: #FFF;
+        border-radius: 3px;
+        font-weight: bold;
+        padding: 3px 6px;
+    }
+#status.connect {
+        background: #E18C1A;
+        color: #FFF;
+}
+#status.connected {
+        background: #00AE04;
+        color: #FFF;
+}
+#status.error {
+        background: #F00;
+        color: #FFF;
+}
+
+button {
+    font-size: 32px;
+}
