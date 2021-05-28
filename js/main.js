@@ -1,5 +1,4 @@
-const trashPercent = document.getElementById("trash-percent");
-
+let openCan = false;
 
 $(document).ready(function(e) {
     client = new Paho.MQTT.Client("mqtt.netpie.io", 443, "50369e17-4123-43b3-ae0b-384898b27d29");
@@ -22,7 +21,7 @@ $(document).ready(function(e) {
         console.log(e);
     }
 
-    //--T0DO: implement this part to fit the project---
+    //----T0DO: implement this part to fit the project----
     client.onMessageArrived = function(message) {
         /*if(message.payloadString == "true" || message.payloadString == "false") {
             //อัพเดทstatusการเปิด - ปิดของถัง true = มีคน = ถังเปิด
@@ -45,12 +44,17 @@ $(document).ready(function(e) {
 
         }*/
         console.log(message.payloadString);
-        trashPercent.innerText = "25 %";
     }
 
-    $(".switch").click(function(e) {
-        mqttSend("@msg/led", "LEDON");
-        document.getElementById("status-led").innerHTML = "LED is ON";
+    $("#toggle-button").click(function(e) {
+        if(openCan) {
+            mqttSend("@msg/obj", "LEDOFF");
+            openCan = false;
+        } else {
+            openCan = true;
+            mqttSend("@msg/obj", "LEDON");
+        }
+
     });
 
 });
