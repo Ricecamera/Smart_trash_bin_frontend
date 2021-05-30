@@ -6,9 +6,10 @@ var result, text;
 
 //----html elements------
 const statusBar = "#status";
-const trashPercentage = "#trash-percent";
+const trashPercentage = ".trash-percent";
+const trashIcon = ".trash-icon";
 const toggleBotton = "#toggle-button";
-
+var pb1;
 
 //----State variable----
 let openCan = false;
@@ -17,6 +18,8 @@ let warningShown = false;
 
 $(document).ready(function(e) {
   client = new Paho.MQTT.Client("mqtt.netpie.io", 443, clientID);
+  pb1 = new ProgressBar(trashIcon, trashPercentage);
+
   var options = {
     useSSL: true,
     userName: token,
@@ -35,6 +38,24 @@ $(document).ready(function(e) {
   function doFail(e) {
     $(statusBar).text("Not Connect").removeClass().addClass("error");
     console.log(e);
+  }
+
+  function GetPreviousData() {
+    var url = "https://api.netpie.io/v2/device/shadow/data" + "?alias=" + alias;
+    var xmlHttp = new XMLHttpRequest();
+
+    xmlHttp.open("GET", url);
+    xmlHttp.setRequestHeader("Authorization", "Device " + clientID + ":" + token);
+    xmlHttp.send(); //<<------------------- this line and above call the API to get the data from NodeMCU database
+    xmlHttp.onreadystatechange = function() {
+      if(xmlHttp.status == 200 && xmlHttp.readyState == 4) {
+        //<<-------------- if the data is ready
+        result = JSON.parse(xmlHttp.responseText); //<<----------------  receive the data and parse to JSON form
+        //console.log(result.data);
+        updateTrashGauge(result.data.distance); // distance = ปริมาณขยะ(number) (จาก @msg/cap)
+        //you can use result.data.xxx(distance or obj), if obj, value can be true or false which means open or close the bin
+      }
+    };
   }
 
   //--T0DO: implement this part to fit the project---
@@ -79,29 +100,8 @@ $(document).ready(function(e) {
       openCan = true;
       mqttSend("@msg/obj", "LEDON");
     }
-
   });
 });
-
-function GetPreviousData() {
-  var url = "https://api.netpie.io/v2/device/shadow/data" + "?alias=" + alias;
-  var xmlHttp = new XMLHttpRequest();
-
-  xmlHttp.open("GET", url);
-  xmlHttp.setRequestHeader("Authorization", "Device " + clientID + ":" + token);
-  xmlHttp.send(); //<<------------------- this line and above call the API to get the data from NodeMCU database
-  xmlHttp.onreadystatechange = function() {
-    if(xmlHttp.status == 200 && xmlHttp.readyState == 4) {
-      //<<-------------- if the data is ready
-      result = JSON.parse(xmlHttp.responseText); //<<----------------  receive the data and parse to JSON form
-      console.log(result.data);
-      updateTrashGauge(result.data.distance); // distance = ปริมาณขยะ(number) (จาก @msg/cap)
-      //you can use result.data.xxx(distance or obj), if obj, value can be true or false which means open or close the bin
-    }
-  };
-}
-
-//ไม่มีฟังก์ชันที่ใช้เช็ค realtime ได้ว่าเว็บเชื่อมต่อกับ netpie หรือป่าว
 
 var mqttSend = function(topic, msg) {
   var message = new Paho.MQTT.Message(msg);
@@ -111,7 +111,7 @@ var mqttSend = function(topic, msg) {
 
 const updateTrashGauge = function(distance) {
   percentNumber = parseInt(distance);
-  $(trashPercentage).text(percentNumber + " %");
+  pb1.setValue(percentNumber);
 
   if(percentNumber < 70) {
     $(".warning-text").hide();
