@@ -117,6 +117,7 @@ input:checked + .slider:before{
 /*-----toggle button styling-----*/
 
 .warning-text {
+    display: none;
     color: white;
     font-size: 30px;
 }
@@ -137,6 +138,7 @@ input:checked + .slider:before{
     grid-area: tag;
 }
 
+
 #status {
         background: #333;
         color: #FFF;
@@ -156,6 +158,24 @@ input:checked + .slider:before{
         background: #F00;
         color: #FFF;
 }
+
+#board-status {
+        background: #333;
+        color: #FFF;
+        border-radius: 3px;
+        font-weight: bold;
+        padding: 3px 6px;
+}
+
+#board-status.online {
+        background: #00AE04;
+        color: #FFF;
+}
+#board-status.offline {
+        background: #F00;
+        color: #FFF;
+}
+
 
 button {
     font-size: 32px;

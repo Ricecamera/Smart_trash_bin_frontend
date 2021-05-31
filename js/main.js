@@ -5,7 +5,8 @@ const alias = "NodeMCU"; //Node's(device) name on netpie
 var result, text;
 
 //----html elements------
-const statusBar = "#status";
+const netpieStatus = "#status";
+const boardStatus = "#board-status";
 const trashPercentage = ".trash-percent";
 const trashIcon = ".trash-icon";
 const toggleBotton = "#toggle-button";
@@ -30,13 +31,13 @@ $(document).ready(function(e) {
   client.connect(options);
 
   function onConnect() {
-    $(statusBar).text("Connected").removeClass().addClass("connected");
+    $(netpieStatus).text("Connected").removeClass().addClass("connected");
     client.subscribe("@msg/#");
     GetPreviousData(); //<<--------------------------------- to get old data from the data base
   }
 
   function doFail(e) {
-    $(statusBar).text("Not Connect").removeClass().addClass("error");
+    $(netpieStatus).text("Not Connect").removeClass().addClass("error");
     console.log(e);
   }
 
@@ -51,9 +52,17 @@ $(document).ready(function(e) {
       if(xmlHttp.status == 200 && xmlHttp.readyState == 4) {
         //<<-------------- if the data is ready
         result = JSON.parse(xmlHttp.responseText); //<<----------------  receive the data and parse to JSON form
-        //console.log(result.data);
-        updateTrashGauge(result.data.distance); // distance = ปริมาณขยะ(number) (จาก @msg/cap)
+        console.log(result.data);
+
         //you can use result.data.xxx(distance or obj), if obj, value can be true or false which means open or close the bin
+        updateTrashGauge(result.data.distance); // distance = ปริมาณขยะ(number) (จาก @msg/cap)
+        if(result.data.obj) {
+          openCan = true;
+          $(toggleBotton).attr("checked", openCan);
+        } else {
+          openCan = false;
+          $(toggleBotton).attr("checked", openCan);
+        }
       }
     };
   }
@@ -81,13 +90,10 @@ $(document).ready(function(e) {
       // the node is online or offline, the status will be sent each time the device changes the status (on to off, off to on)
       text = text.split(" ")[2]; //<<----------------  split ข้อความเดิม("message=NodeMCU is online(offline)") แล้วเอาเฉพาะส่วน online/offline บ่งบอกสถานะของ nodeMCU
       if(text === "online") {
-        $(statusBar).text("Connected").removeClass().addClass("connected");
-      }
-      else if(text === "offline") {
-        $(statusBar).text("Connecting...").removeClass().addClass("connect");
+        $(boardStatus).text("Online").removeClass().addClass("online");
       }
       else {
-        $(statusBar).text("Not Connect").removeClass().addClass("error");
+        $(boardStatus).text("Offline").removeClass().addClass("offline");
       }
     }
   };
@@ -104,9 +110,14 @@ $(document).ready(function(e) {
 });
 
 var mqttSend = function(topic, msg) {
-  var message = new Paho.MQTT.Message(msg);
-  message.destinationName = topic;
-  client.send(message);
+  try {
+    var message = new Paho.MQTT.Message(msg);
+    message.destinationName = topic;
+    client.send(message);
+  } catch(e) {
+    console.log(e.message);
+  }
+
 };
 
 const updateTrashGauge = function(distance) {
@@ -114,12 +125,16 @@ const updateTrashGauge = function(distance) {
   pb1.setValue(percentNumber);
 
   if(percentNumber < 70) {
-    $(".warning-text").hide();
+    $(".warning-text").hide(500);
     warningShown = false;
   } else {
     if(!warningShown) {
-      $(".warning-text").show(1000);
+      $(".warning-text").show(500);
+      warningShown = true;
     }
-    warningShown = true;
+
+    if(percentNumber == 100) {
+      $(".warning-text").text("The can is full!");
+    }
   }
 }
