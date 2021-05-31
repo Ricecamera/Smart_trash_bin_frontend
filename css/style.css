@@ -116,10 +116,25 @@ input:checked + .slider:before{
 }
 /*-----toggle button styling-----*/
 
-.warning-text {
+#warning-text {
     display: none;
     color: white;
     font-size: 30px;
+}
+
+#warning-text.animate{
+    animation: animate 5s linear infinite;
+}
+
+@keyframes animate {
+    0%, 18%, 50.1%, 60%, 65.1%, 80%, 90.1%, 92%{
+        color: #1C1D1E;
+        text-shadow: none;
+    }
+    18.1%, 20.1%, 30%, 50%, 60.1%, 65%, 80.1%, 90%, 92.1%, 100%{
+        color: rgb(218, 81, 2);
+        text-shadow: 0 0 5px #F6A811;
+    }
 }
 
 #trash-level-box{
@@ -174,9 +189,4 @@ input:checked + .slider:before{
 #board-status.offline {
         background: #F00;
         color: #FFF;
-}
-
-
-button {
-    font-size: 32px;
 }

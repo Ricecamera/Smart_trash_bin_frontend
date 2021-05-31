@@ -10,6 +10,7 @@ const boardStatus = "#board-status";
 const trashPercentage = ".trash-percent";
 const trashIcon = ".trash-icon";
 const toggleBotton = "#toggle-button";
+const warning = "#warning-text";
 var pb1;
 
 //----State variable----
@@ -37,7 +38,7 @@ $(document).ready(function(e) {
   }
 
   function doFail(e) {
-    $(netpieStatus).text("Not Connect").removeClass().addClass("error");
+    $(netpieStatus).text("Not Connected").removeClass().addClass("error");
     console.log(e);
   }
 
@@ -73,11 +74,11 @@ $(document).ready(function(e) {
     if(message.destinationName == "@msg/obj") {
       console.log(text + " from obj");
       // data from IR sensor
-      if(text === "LEDON") {
+      if(text === "true") {
         openCan = true;
         $(toggleBotton).attr("checked", openCan);
       }
-      else if(text === "LEDOFF") {
+      else if(text === "false") {
         openCan = false;
         $(toggleBotton).attr("checked", openCan);
       }
@@ -90,51 +91,54 @@ $(document).ready(function(e) {
       // the node is online or offline, the status will be sent each time the device changes the status (on to off, off to on)
       text = text.split(" ")[2]; //<<----------------  split ข้อความเดิม("message=NodeMCU is online(offline)") แล้วเอาเฉพาะส่วน online/offline บ่งบอกสถานะของ nodeMCU
       if(text === "online") {
-        $(boardStatus).text("Online").removeClass().addClass("online");
+        $(boardStatus).text("Connected").removeClass().addClass("online");
       }
       else {
-        $(boardStatus).text("Offline").removeClass().addClass("offline");
+        $(boardStatus).text("Not Connected").removeClass().addClass("offline");
       }
     }
   };
 
   $(toggleBotton).click(function(e) {
     if(openCan) {
-      mqttSend("@msg/obj", "LEDOFF");
+      //console.log("close can lid")
       openCan = false;
+      mqttSend("@msg/obj", "false");
     } else {
+      //console.log("open can lid");
       openCan = true;
-      mqttSend("@msg/obj", "LEDON");
+      mqttSend("@msg/obj", "true");
     }
   });
 });
 
 var mqttSend = function(topic, msg) {
-  try {
-    var message = new Paho.MQTT.Message(msg);
-    message.destinationName = topic;
-    client.send(message);
-  } catch(e) {
-    console.log(e.message);
-  }
-
+  var message = new Paho.MQTT.Message(msg);
+  message.destinationName = topic;
+  client.send(message);
 };
 
 const updateTrashGauge = function(distance) {
-  percentNumber = parseInt(distance);
+  percentNumber = Math.round(parseFloat(distance));
   pb1.setValue(percentNumber);
 
   if(percentNumber < 70) {
-    $(".warning-text").hide(500);
+    $(warning).hide();
+    $(warning).removeClass();
     warningShown = false;
   } else {
+    if(percentNumber >= 100) {
+      $(warning).text("The can is full!");
+    } else {
+      $(warning).text("The can is almost full!");
+    }
+
     if(!warningShown) {
-      $(".warning-text").show(500);
+      $(warning).show();
+      $(warning).addClass("animate");
       warningShown = true;
     }
 
-    if(percentNumber == 100) {
-      $(".warning-text").text("The can is full!");
-    }
+
   }
 }
