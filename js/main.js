@@ -119,7 +119,7 @@ var mqttSend = function(topic, msg) {
 };
 
 const updateTrashGauge = function(distance) {
-  percentNumber = Math.round(parseFloat(distance));
+  percentNumber = 100 - Math.round(parseFloat(distance));
   pb1.setValue(percentNumber);
 
   if(percentNumber < 70) {
